@@ -1,3 +1,4 @@
+/* Declare the let variables */
 let xp = 0;
 let health = 100;
 let gold = 50;
@@ -5,6 +6,8 @@ let currentWeapon = 0;
 let fighting;
 let monsterHealth;
 let inventory = ["stick"];
+
+/* Declare the constant variables */
 
 const button1 = document.querySelector("#button1");
 const button2 = document.querySelector("#button2");
@@ -15,7 +18,12 @@ const healthText = document.querySelector("#healthText");
 const goldText = document.querySelector("#goldText");
 const monsterStats = document.querySelector("#monsterStats");
 const monsterName = document.querySelector("#monsterName");
+/**
+ * Represents the element that displays the monster's health.
+ * @type {HTMLElement}
+ */
 const monsterHealthText = document.querySelector("#monsterHealth");
+/* Declare the constant arrays */
 const weapons = [
   { name: "stick", power: 5 },
   { name: "dagger", power: 30 },
@@ -103,6 +111,10 @@ button1.onclick = goStore;
 button2.onclick = goCave;
 button3.onclick = fightDragon;
 
+/**
+ * Updates the UI based on the provided location object.
+ * @param {Object} location - The location object containing the data to update the UI.
+ */
 function update(location) {
   monsterStats.style.display = "none";
   button1.innerText = location["button text"][0];
@@ -114,6 +126,9 @@ function update(location) {
   text.innerHTML = location.text;
 }
 
+/**
+ * Goes to the town by updating the location.
+ */
 function goTown() {
   update(locations[0]);
 }
@@ -126,6 +141,12 @@ function goCave() {
   update(locations[2]);
 }
 
+/**
+ * Buys health using gold.
+ * If the player has enough gold, subtracts 10 gold and adds 10 health.
+ * Updates the gold and health text elements accordingly.
+ * If the player does not have enough gold, displays an error message.
+ */
 function buyHealth() {
   if (gold >= 10) {
     gold -= 10;
@@ -138,6 +159,14 @@ function buyHealth() {
 }
 
 function buyWeapon() {
+  /**
+   * Buys a weapon if the player has enough gold.
+   * If the player has enough gold, deducts the cost of the weapon from the gold,
+   * updates the current weapon, updates the gold text, adds the new weapon to the inventory,
+   * and displays a message with the new weapon and the inventory.
+   * If the player does not have enough gold, displays a message indicating so.
+   * If the player already has the most powerful weapon, displays a message and changes the button action to sell the weapon.
+   */
   if (currentWeapon < weapons.length - 1) {
     if (gold >= 30) {
       gold -= 30;
@@ -157,6 +186,11 @@ function buyWeapon() {
   }
 }
 
+/**
+ * Sells a weapon from the inventory.
+ * If the inventory has more than one weapon, the player earns 15 gold and the weapon is removed from the inventory.
+ * If the inventory has only one weapon, a message is displayed indicating that the player cannot sell their only weapon.
+ */
 function sellWeapon() {
   if (inventory.length > 1) {
     gold += 15;
@@ -169,21 +203,35 @@ function sellWeapon() {
   }
 }
 
+/**
+ * Function to initiate a fight with a slime.
+ */
 function fightSlime() {
   fighting = 0;
   goFight();
 }
 
+/**
+ * Function to initiate a fight with a beast.
+ * @returns {void}
+ */
 function fightBeast() {
   fighting = 1;
   goFight();
 }
 
+/**
+ * Function to initiate a fight with a dragon.
+ */
 function fightDragon() {
   fighting = 2;
   goFight();
 }
 
+/**
+ * Function that initiates a fight with a monster.
+ * @returns {void}
+ */
 function goFight() {
   update(locations[3]);
   monsterHealth = monsters[fighting].health;
@@ -192,6 +240,9 @@ function goFight() {
   monsterHealthText.innerText = monsterHealth;
 }
 
+/**
+ * Performs an attack action.
+ */
 function attack() {
   text.innerText = "The " + monsters[fighting].name + " attacks.";
   text.innerText +=
@@ -220,6 +271,11 @@ function attack() {
   }
 }
 
+/**
+ * Calculates the attack value of a monster based on its level.
+ * @param {number} level - The level of the monster.
+ * @returns {number} - The calculated attack value.
+ */
 function getMonsterAttackValue(level) {
   const hit = level * 5 - Math.floor(Math.random() * xp);
   console.log(hit);
@@ -274,6 +330,12 @@ function pickEight() {
   pick(8);
 }
 
+/**
+ * Picks a random number and compares it with the provided guess.
+ * If the guess matches the random number, the player wins 20 gold.
+ * If the guess does not match, the player loses 10 health.
+ * @param {number} guess - The number guessed by the player.
+ */
 function pick(guess) {
   const numbers = [];
   while (numbers.length < 10) {
